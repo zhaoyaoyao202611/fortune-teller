@@ -1,4 +1,0 @@
-let database;
-export function db(){return database??=new Promise((resolve,reject)=>{const r=indexedDB.open('moye-reader',1);r.onupgradeneeded=()=>{r.result.createObjectStore('books',{keyPath:'id'});r.result.createObjectStore('highlights',{keyPath:'id'})};r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});}
-export async function all(store){const d=await db();return new Promise((resolve,reject)=>{const r=d.transaction(store).objectStore(store).getAll();r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)})}
-export async function write(store,value,remove=false){const d=await db();return new Promise((resolve,reject)=>{const t=d.transaction(store,'readwrite');const s=t.objectStore(store);remove?s.delete(value):s.put(value);t.oncomplete=resolve;t.onerror=()=>reject(t.error)})}
